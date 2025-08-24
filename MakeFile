@@ -1,0 +1,36 @@
+#---------------------------------------------------------------------------------
+# This Makefile is for a basic libogc project.
+# It tells the compiler how to build your code.
+#---------------------------------------------------------------------------------
+# Your source files (.c, .cpp)
+SRCS = $(wildcard *.c)
+SRCS += $(wildcard *.cpp)
+
+# The name of your output file (.dol)
+TARGET  = AssistantChannel.dol
+
+# Include paths for libraries
+LIBS    = -logc -lwiiuse
+
+#---------------------------------------------------------------------------------
+# Standard devkitPro definitions - do not change these
+#---------------------------------------------------------------------------------
+DEVKITPRO := $(shell if [ -n "$$DEVKITPRO" ]; then echo $$DEVKITPRO; else echo /opt/devkitpro; fi)
+DEVKITPPC := $(DEVKITPRO)/devkitPPC
+LIBOGC_PATH := $(DEVKITPRO)/libogc
+
+#---------------------------------------------------------------------------------
+# Build rules
+#---------------------------------------------------------------------------------
+.PHONY: all clean
+
+all: $(TARGET)
+
+$(TARGET): $(SRCS)
+	@echo "Compiling and linking..."
+	$(DEVKITPPC)/bin/powerpc-eabi-gcc $(SRCS) -o $(TARGET) -I$(LIBOGC_PATH)/include -L$(LIBOGC_PATH)/lib $(LIBS) -specs=wii_libogc.specs -fno-strict-aliasing
+
+clean:
+	@echo "Cleaning..."
+	@rm -f $(TARGET)
+ 
